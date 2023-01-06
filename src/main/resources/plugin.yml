@@ -1,0 +1,7 @@
+name: CustomFIshing
+version: 0.01
+main: me.dami.com.customfishing.CustomFIshing
+api-version: 1.19
+depend: [ WorldGuard, WorldEdit ]
+authors: [ gewoondami60 ]
+description: custom region fishing
