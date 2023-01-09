@@ -1,5 +1,8 @@
 package me.dami.com.customfishing.menus;
 
+import me.dami.com.customfishing.Files.ConfigManager;
+import me.dami.com.customfishing.region.FishingRegion;
+import me.dami.com.customfishing.region.FishingStage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -13,11 +16,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class RegionInventory implements Listener {
+public class RegionInventory{
 
     //region Static Navigation Items
-
-    ItemStack notPossible = new ItemStack(Material.RED_STAINED_GLASS_PANE);
     ItemStack standard = new ItemStack(Material.WHITE_STAINED_GLASS_PANE);
 
     ItemStack possibleL = new ItemStack(Material.YELLOW_STAINED_GLASS_PANE);
@@ -25,6 +26,7 @@ public class RegionInventory implements Listener {
 
     ItemStack statusOff = new ItemStack(Material.LEVER);
     ItemStack statusOn = new ItemStack(Material.TORCH);
+    ItemStack statusNo = new ItemStack(Material.BARRIER);
 
     ItemStack reset = new ItemStack(Material.REDSTONE_TORCH);
 
@@ -38,6 +40,7 @@ public class RegionInventory implements Listener {
 
 
     public void OpenGui(Player player, String _region){
+        FishingRegion fr = ConfigManager.getFishingRegion(_region);
         Inventory gui = Bukkit.createInventory(player, 54, ChatColor.AQUA + "Fishing Menu");
 
 
@@ -50,14 +53,6 @@ public class RegionInventory implements Listener {
 
         //------------------------\\
 
-        ItemMeta notPossible_meta = notPossible.getItemMeta();
-
-        notPossible_meta.setDisplayName(ChatColor.RED + "-");
-
-        notPossible_meta.setLore(null);
-        notPossible.setItemMeta(notPossible_meta);
-
-        //------------------------\\
 
         ItemMeta standard_meta = standard.getItemMeta();
 
@@ -92,7 +87,7 @@ public class RegionInventory implements Listener {
 
         statusOff_meta.setDisplayName(ChatColor.GRAY + "Disabled Fishing");
         statusOff_lore.add("Custom fishing is disabled here.");
-        statusOff_lore.add("Meaning players can't fish here.");
+        statusOff_lore.add("Meaning players can't fish custom here.");
         statusOff_lore.add("click item to turn it back on.");
 
         statusOff_meta.setLore(statusOff_lore);
@@ -105,12 +100,27 @@ public class RegionInventory implements Listener {
         ArrayList<String> statusOn_lore = new ArrayList<String>();
 
         statusOn_meta.setDisplayName(ChatColor.GREEN + "Enabled Fishing");
-        statusOff_lore.add("Custom fishing is enabled here.");
-        statusOff_lore.add("Meaning players can fish here.");
-        statusOff_lore.add("click item to turn it back off.");
+        statusOn_lore.add("Custom fishing is enabled here.");
+        statusOn_lore.add("Meaning players can fish here.");
+        statusOn_lore.add("click item so people can't fish anymore.");
 
         statusOn_meta.setLore(statusOn_lore);
         statusOn.setItemMeta(statusOn_meta);
+
+        //------------------------\\
+
+
+        ItemMeta statusNo_meta = statusNo.getItemMeta();
+
+        ArrayList<String> statusNo_lore = new ArrayList<String>();
+
+        statusNo_meta.setDisplayName(ChatColor.GREEN + "No Fishing");
+        statusNo_lore.add("Fishing is disabled here.");
+        statusNo_lore.add("Meaning players can't fish here.");
+        statusNo_lore.add("click item to turn on fishing.");
+
+        statusNo_meta.setLore(statusNo_lore);
+        statusNo.setItemMeta(statusNo_meta);
 
         //------------------------\\
 
@@ -144,6 +154,24 @@ public class RegionInventory implements Listener {
         gui.setItem(13, region);
 
         gui.setItem(15, reset);
+
+        switch (fr.getStage()) {
+            case ON: {
+
+                gui.setItem(11, statusOff);
+                break;
+            }
+            case OFF: {
+
+                gui.setItem(11, statusNo);
+                break;
+            }
+            case NO: {
+
+                gui.setItem(11, statusOn);
+                break;
+            }
+        }
 
         player.openInventory(gui);
     }
