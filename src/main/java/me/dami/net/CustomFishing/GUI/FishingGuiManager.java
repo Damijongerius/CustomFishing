@@ -1,4 +1,4 @@
-package me.dami.com.customfishing.menus;
+package me.dami.net.CustomFishing.GUI;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,9 +11,10 @@ import java.util.Map;
 
 public class FishingGuiManager implements Listener {
 
-    private static Map<Player,FishingGuis> activeGuis = new LinkedHashMap<>();
+    private static Map<Player, FishingGuis> activeGuis = new LinkedHashMap<>();
+    private static Map<Player, Integer[]> Indexes = new LinkedHashMap<>();
 
-    private ManageFishingInventory MFI = new ManageFishingInventory();
+    private FishingMenuManager fishingMenuManager = new FishingMenuManager();
 
     @EventHandler
     public void OnInventoryClose(InventoryCloseEvent e){
@@ -24,11 +25,12 @@ public class FishingGuiManager implements Listener {
 
     @EventHandler
     public void OnInventoryClick(InventoryClickEvent e){
+        System.out.println("player click");
         Player player = (Player) e.getWhoClicked();
         if(activeGuis.containsKey(player)){
             switch (activeGuis.get(player)){
                 case FishingRegionGui:{
-                    MFI.clickEvent(e);
+                    fishingMenuManager.clickEvent(e,Indexes.get(player));
                     break;
                 }
                 case FishingItemEnchants:{
@@ -45,5 +47,19 @@ public class FishingGuiManager implements Listener {
 
     public static void AddGui(Player _p, FishingGuis _gui){
         activeGuis.put(_p, _gui);
+        Indexes.put(_p, new Integer[]{0, 0});
+    }
+
+    public static void SetIndex(Player p,int _index){
+        Integer[] index = Indexes.get(p);
+        index[0] = _index;
+        Indexes.replace(p, index);
+    }
+
+    public static void SetIndex(Player p, int _index0, int _index1){
+        Integer[] index = Indexes.get(p);
+        index[0] = _index0;
+        index[1] = _index1;
+        Indexes.replace(p, index);
     }
 }

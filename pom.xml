@@ -5,15 +5,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>me.dami.com</groupId>
-    <artifactId>CustomFIshing</artifactId>
+    <artifactId>CustomizableFishing</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>CustomFIshing</name>
+    <name>CustomizableFishing</name>
 
     <description>custom region fishing</description>
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>19</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 

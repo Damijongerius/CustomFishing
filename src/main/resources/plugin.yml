@@ -1,6 +1,6 @@
-name: CustomFIshing
-version: 0.01
-main: me.dami.com.customfishing.CustomFIshing
+name: CustomizableFishing
+version: 0.50
+main: me.dami.net.CustomFishing.Main.CustomizableFishing
 api-version: 1.19
 depend: [ WorldGuard, WorldEdit ]
 authors: [ gewoondami60 ]

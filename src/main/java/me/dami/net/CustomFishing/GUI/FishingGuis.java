@@ -1,4 +1,4 @@
-package me.dami.com.customfishing.menus;
+package me.dami.net.CustomFishing.GUI;
 
 public enum FishingGuis {
     FishingRegionGui,
