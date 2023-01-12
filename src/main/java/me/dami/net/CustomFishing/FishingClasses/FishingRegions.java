@@ -53,23 +53,26 @@ public class FishingRegions {
     }
 
     public List<FishingItems> getItems(){
-        return items;
+        return new ArrayList<>();
     }
 
     public List<FishingItems> getItems(int iIndex, int jIndex) {
-        List<FishingItems> items = new ArrayList<>();
-        for (int i = iIndex; i < jIndex && i < this.items.size(); i++) {
-            items.add(this.items.get(i));
-        }
-        return items;
+        List<FishingItems> itemsz = new ArrayList<>();
+       // for (int i = iIndex; i < jIndex && i < this.items.size(); i++) {
+       //     items.add(this.items.get(i));
+       // }
+        return itemsz;
     }
 
 
     public void AddItem(FishingItems _item) {
         this.items.add(_item);
-
-        totalDrop += _item.getDropChance()[0];
-        CalculateDropChances();
+        for(FishingItems item : items){
+            //item.setDropPercent(totalDrop);
+            System.out.println(item.getItem().getType());
+        }
+        //this.totalDrop += _item.getDropChance()[0];
+        //CalculateDropChances();
     }
 
     public void ClearItems(){

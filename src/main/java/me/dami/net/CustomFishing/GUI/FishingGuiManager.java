@@ -25,7 +25,6 @@ public class FishingGuiManager implements Listener {
 
     @EventHandler
     public void OnInventoryClick(InventoryClickEvent e){
-        System.out.println("player click");
         Player player = (Player) e.getWhoClicked();
         if(activeGuis.containsKey(player)){
             switch (activeGuis.get(player)){

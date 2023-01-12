@@ -25,7 +25,6 @@ public class FishingMenuManager {
     int[][] ItemDiv = {{28,29,30,31,32,33,34},{37,38,39,40,41,42,43},{46,47,48,49,50,51,52}};
 
     public void clickEvent(InventoryClickEvent e, Integer[] index){
-        System.out.println("click event");
         FishingRegions fishingRegions = null;
         try{
             if(e.getClickedInventory().getType().getDefaultTitle() == "Chest"){
@@ -124,17 +123,17 @@ public class FishingMenuManager {
             }
         }
 
-        int indexX = _fishingRegions.getItems().size() - index[0] % 3;
-        int indexY = _fishingRegions.getItems().size() - index[0] / 3;
+        int indexX = (_fishingRegions.getItems().size() - index[0]) % 3;
+        int indexY = (_fishingRegions.getItems().size() - index[0]) / 3;
 
-        if(!itemExists){
+        //if(!itemExists){
             FishingItems fishingItem = new FishingItems(handItem);
 
             _fishingRegions.AddItem(fishingItem);
 
-            e.getClickedInventory().setItem(ItemDiv[indexX][indexY],SetDisplay(fishingItem));
+            //e.getClickedInventory().setItem(ItemDiv[indexX][indexY],SetDisplay(fishingItem));
 
-        }else{
+        /*}else{
             int[] amounts = originalItem.getItemAmount();
             Map< Enchantment, Integer> enchantments = handItem.getEnchantments();
             if(amounts[1] < handItem.getAmount()) originalItem.setItemAmount(new int[] {amounts[0], handItem.getAmount()});
@@ -156,8 +155,11 @@ public class FishingMenuManager {
                         }
                     }
                 }
+
             }
+
         }
+        */
     }
 
     private ItemStack SetDisplay(FishingItems _item){

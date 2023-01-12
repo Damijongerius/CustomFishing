@@ -25,6 +25,7 @@ public class FishingItems {
 
 
     public FishingItems(ItemStack _item){
+        /*
         Map<Enchantment, Integer> enchantments = _item.getEnchantments();
         if (!enchantments.isEmpty()) {
             List<FishingEnchantments> pair = new ArrayList<>();
@@ -45,12 +46,16 @@ public class FishingItems {
             }
         }
 
+         */
+
+
+
         this.item = _item;
     }
 
     //region getters and setters
     public ItemStack getItem() {
-        return item.clone();
+        return this.item.clone();
     }
 
     public float[] getXpRange() {
