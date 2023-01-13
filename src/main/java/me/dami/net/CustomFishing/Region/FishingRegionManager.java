@@ -36,7 +36,7 @@ public class FishingRegionManager {
         for(Map.Entry<String,FishingRegions> fishingRegions1 : fishingRegions.entrySet()){
             map.put(fishingRegions1.getKey(), fishingRegions1.getValue().serialize());
         }
-        configManager.setConfig("world.region", map);
+        configManager.setConfig("world.regions", map);
         configManager.saveConfig();
     }
 
@@ -45,15 +45,19 @@ public class FishingRegionManager {
         try {
             ConfigurationSection section = configManager.getSection("world.regions");
             for(String region : RegionManaging.getRegions()){
-                ConfigurationSection fishingRegion = section.getConfigurationSection(region);
+                ConfigurationSection fishingRegion = null;
+                if(section != null)
+                    fishingRegion = section.getConfigurationSection(region);
                 if(fishingRegion == null){
                     fishingRegions.put(region,new FishingRegions());
                 }
             }
 
+            Map<String,Object> map = new LinkedHashMap<>();
             for(Map.Entry<String,FishingRegions> fishingRegions1 : fishingRegions.entrySet()){
-                configManager.setConfig("world.region", fishingRegions1.getValue().serialize());
+                map.put(fishingRegions1.getKey(),fishingRegions1.getValue().serialize());
             }
+            configManager.setConfig("world.region",map);
             configManager.saveConfig();
 
         } catch (Exception e) {

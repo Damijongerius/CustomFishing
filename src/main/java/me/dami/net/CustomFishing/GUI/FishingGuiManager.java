@@ -14,7 +14,7 @@ public class FishingGuiManager implements Listener {
     private static Map<Player, FishingGuis> activeGuis = new LinkedHashMap<>();
     private static Map<Player, Integer[]> Indexes = new LinkedHashMap<>();
 
-    private FishingMenuManager fishingMenuManager = new FishingMenuManager();
+    FishingMenuManager fishingMenuManager = new FishingMenuManager();
 
     @EventHandler
     public void OnInventoryClose(InventoryCloseEvent e){
@@ -23,13 +23,19 @@ public class FishingGuiManager implements Listener {
         }
     }
 
+
     @EventHandler
     public void OnInventoryClick(InventoryClickEvent e){
+        System.out.println("handler");
         Player player = (Player) e.getWhoClicked();
         if(activeGuis.containsKey(player)){
             switch (activeGuis.get(player)){
                 case FishingRegionGui:{
-                    fishingMenuManager.clickEvent(e,Indexes.get(player));
+                    if(e.getClickedInventory().getType().getDefaultTitle() == "Chest")
+                        e.setCancelled(true);
+                    fishingMenuManager = new FishingMenuManager(e,Indexes.get(player));
+                    Thread thread = new Thread(fishingMenuManager);
+                    thread.start();
                     break;
                 }
                 case FishingItemEnchants:{

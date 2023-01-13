@@ -25,7 +25,7 @@ public class FishingItems {
 
 
     public FishingItems(ItemStack _item){
-        /*
+
         Map<Enchantment, Integer> enchantments = _item.getEnchantments();
         if (!enchantments.isEmpty()) {
             List<FishingEnchantments> pair = new ArrayList<>();
@@ -46,16 +46,12 @@ public class FishingItems {
             }
         }
 
-         */
-
-
-
         this.item = _item;
     }
 
     //region getters and setters
     public ItemStack getItem() {
-        return this.item.clone();
+        return this.item;
     }
 
     public float[] getXpRange() {
@@ -94,6 +90,14 @@ public class FishingItems {
         return this.possibleEnchants;
     }
     //endregion
+
+    public int getRandomAmount(){
+        return (int) Math.round(Math.random() * (itemAmount[1] - itemAmount[0]) + itemAmount[0]);
+    }
+
+    public int getRandomxp(){
+        return (int) Math.round(Math.random() * (xpRange[1] - xpRange[0]) + xpRange[0]);
+    }
 
     public Map<String,Object> serialize(){
         Map<String, Object> map = new LinkedHashMap<>();

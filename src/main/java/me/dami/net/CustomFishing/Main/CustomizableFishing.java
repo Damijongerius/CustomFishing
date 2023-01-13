@@ -5,6 +5,7 @@ import me.dami.net.CustomFishing.Config.ConfigurationManager;
 import me.dami.net.CustomFishing.Fishing.Fishing;
 import me.dami.net.CustomFishing.GUI.FishingGuiManager;
 import me.dami.net.CustomFishing.GUI.FishingMenuGui;
+import me.dami.net.CustomFishing.GUI.StaticGUIItems;
 import me.dami.net.CustomFishing.Region.FishingRegionManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -39,6 +40,8 @@ public class CustomizableFishing extends JavaPlugin {
         fishingRegionManager = new FishingRegionManager(fishingRegionConfig);
         fishingGuiManager = new FishingGuiManager();
 
+        StaticGUIItems localStaticGUIItems = new StaticGUIItems();
+
         getServer().getPluginManager().registerEvents(fishing, this);
         getServer().getPluginManager().registerEvents(fishingGuiManager, this);
 
@@ -49,7 +52,7 @@ public class CustomizableFishing extends JavaPlugin {
 
     @Override
     public void onDisable(){
-
+        fishingRegionManager.updateFishingRegions();
     }
 
     public static CustomizableFishing get(){

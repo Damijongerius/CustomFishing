@@ -18,25 +18,36 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class FishingMenuManager {
+public class FishingMenuManager implements Runnable{
 
     static int orderL[] = {27,36,45};
     static int orderR[] = {35,44,53};
     int[][] ItemDiv = {{28,29,30,31,32,33,34},{37,38,39,40,41,42,43},{46,47,48,49,50,51,52}};
 
-    public void clickEvent(InventoryClickEvent e, Integer[] index){
+    InventoryClickEvent e;
+    Integer[] index;
+
+    public FishingMenuManager(InventoryClickEvent _e, Integer[] _index){
+        this.e = _e;
+        this.index = _index;
+    }
+
+    public FishingMenuManager(){
+
+    }
+
+    @Override
+    public void run(){
         FishingRegions fishingRegions = null;
-        try{
-            if(e.getClickedInventory().getType().getDefaultTitle() == "Chest"){
+            if(e.getClickedInventory().getType().getDefaultTitle() == "Chest") {
                 fishingRegions = FishingRegionManager.getFishingRegion(Objects.requireNonNull(e.getClickedInventory()).getItem(13).getItemMeta().getDisplayName());
             }else{
                 return;
             }
-        }catch (Exception ed){};
+        System.out.println("click");
 
         Player p = (Player) e.getWhoClicked();
         int slot = e.getSlot();
-        e.setCancelled(true);
         if(e.getCursor() != null && e.getCursor().getType() != Material.AIR){
             HasItem(e,index, fishingRegions);
             return;
@@ -77,7 +88,7 @@ public class FishingMenuManager {
             for (FishingItems item : items) {
                 int indexX = fishingRegions.getItems().size() - index[0] - 3 % 3;
                 int indexY = fishingRegions.getItems().size() - index[0] - 3 / 3;
-                e.getClickedInventory().setItem(ItemDiv[indexX][indexY], SetDisplay(item));
+                //e.getClickedInventory().setItem(ItemDiv[indexX][indexY], SetDisplay(item));
             }
             return;
         }
@@ -89,7 +100,7 @@ public class FishingMenuManager {
                 for (FishingItems item : items) {
                     int indexX = fishingRegions.getItems().size() - index[0] + 3 % 3;
                     int indexY = fishingRegions.getItems().size() - index[0] + 3 / 3;
-                    e.getClickedInventory().setItem(ItemDiv[indexX][indexY], SetDisplay(item));
+                    //e.getClickedInventory().setItem(ItemDiv[indexX][indexY], SetDisplay(item));
                 }
             }
             return;
@@ -125,15 +136,17 @@ public class FishingMenuManager {
 
         int indexX = (_fishingRegions.getItems().size() - index[0]) % 3;
         int indexY = (_fishingRegions.getItems().size() - index[0]) / 3;
+        System.out.println(indexX);
+        System.out.println(indexY);
 
-        //if(!itemExists){
-            FishingItems fishingItem = new FishingItems(handItem);
+        if(!itemExists){
+            FishingItems fishingItem = new FishingItems(handItem.clone());
 
             _fishingRegions.AddItem(fishingItem);
 
-            //e.getClickedInventory().setItem(ItemDiv[indexX][indexY],SetDisplay(fishingItem));
+            e.getClickedInventory().setItem(ItemDiv[indexX][indexY],SetDisplay(fishingItem));
 
-        /*}else{
+        }else{
             int[] amounts = originalItem.getItemAmount();
             Map< Enchantment, Integer> enchantments = handItem.getEnchantments();
             if(amounts[1] < handItem.getAmount()) originalItem.setItemAmount(new int[] {amounts[0], handItem.getAmount()});
@@ -159,7 +172,7 @@ public class FishingMenuManager {
             }
 
         }
-        */
+
     }
 
     private ItemStack SetDisplay(FishingItems _item){

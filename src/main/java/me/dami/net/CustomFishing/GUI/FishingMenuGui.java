@@ -33,9 +33,7 @@ public class FishingMenuGui {
         for(int i = 0; i < items.size(); i++){
             int indexX = i % 3;
             int indexY = i / 3;
-            System.out.println(indexX + "+" + indexY);
-            gui.setItem(rows[indexX][indexY],items.get(i).getItem());
-            System.out.println(items.get(i).getItem().getType());
+            gui.setItem(rows[indexX][indexY],items.get(i).getItem().clone());
         }
 
 

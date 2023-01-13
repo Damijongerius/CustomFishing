@@ -48,31 +48,42 @@ public class FishingRegions {
     }
 
     public FishingItems GetRandomItem(){
+        System.out.println("-----------------------");
+        System.out.println("totaldrop:" + totalDrop);
+        double randomNum = (Math.random() * 10000) / 100;
+        System.out.println("random number:" + randomNum);
 
-        return null;
+        double drop = 0;
+        for (FishingItems item : items){
+            System.out.print("<");
+            System.out.print(item.getDropChance());
+            System.out.print(">");
+            drop += item.getDropChance()[1];
+            System.out.println(drop);
+            if(drop > randomNum){
+                return item;
+            }
+        }
+        return items.get(0);
     }
 
     public List<FishingItems> getItems(){
-        return new ArrayList<>();
+        return this.items;
     }
 
     public List<FishingItems> getItems(int iIndex, int jIndex) {
-        List<FishingItems> itemsz = new ArrayList<>();
-       // for (int i = iIndex; i < jIndex && i < this.items.size(); i++) {
-       //     items.add(this.items.get(i));
-       // }
-        return itemsz;
+        List<FishingItems> newItems = new ArrayList<>();
+        for (int i = iIndex; i < jIndex && i < this.items.size(); i++) {
+            newItems.add(this.items.get(i));
+        }
+        return newItems;
     }
 
 
     public void AddItem(FishingItems _item) {
         this.items.add(_item);
-        for(FishingItems item : items){
-            //item.setDropPercent(totalDrop);
-            System.out.println(item.getItem().getType());
-        }
-        //this.totalDrop += _item.getDropChance()[0];
-        //CalculateDropChances();
+        this.totalDrop += _item.getDropChance()[0];
+        CalculateDropChances();
     }
 
     public void ClearItems(){
