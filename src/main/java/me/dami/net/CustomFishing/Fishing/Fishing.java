@@ -2,6 +2,7 @@ package me.dami.net.CustomFishing.Fishing;
 
 import me.dami.net.CustomFishing.FishingClasses.FishingItems;
 import me.dami.net.CustomFishing.FishingClasses.FishingRegions;
+import me.dami.net.CustomFishing.FishingClasses.FishingStatus;
 import me.dami.net.CustomFishing.Main.CustomizableFishing;
 import me.dami.net.CustomFishing.Region.FishingRegionManager;
 import me.dami.net.CustomFishing.Region.RegionManaging;
@@ -30,13 +31,29 @@ public class Fishing implements Listener {
         if (event.getState() != PlayerFishEvent.State.CAUGHT_FISH) {
             return;
         }
+
+
         Player player = event.getPlayer();
 
-        event.setCancelled(true);
-        FishHook hook = event.getHook();
+        if (!player.hasPermission("Fishing.Fish")) {
+            System.out.println("no bitches");
+        return;
+        }
 
         String region = RegionManaging.getRegion(player).iterator().next().getId();
         FishingRegions fishingRegion = FishingRegionManager.getFishingRegion(region);
+
+        if(fishingRegion.getStatus() == FishingStatus.NO){
+            event.setCancelled(true);
+            return;
+        }
+
+        if(fishingRegion.getStatus() == FishingStatus.OFF){
+            return;
+        }
+
+        event.setCancelled(true);
+        FishHook hook = event.getHook();
 
         FishingItems randomItem = fishingRegion.GetRandomItem();
         ItemStack rItem = randomItem.getItem().clone();

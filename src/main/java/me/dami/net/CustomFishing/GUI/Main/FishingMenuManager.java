@@ -1,9 +1,11 @@
-package me.dami.net.CustomFishing.GUI;
+package me.dami.net.CustomFishing.GUI.Main;
 
 import me.dami.net.CustomFishing.FishingClasses.FishingEnchantments;
 import me.dami.net.CustomFishing.FishingClasses.FishingItems;
 import me.dami.net.CustomFishing.FishingClasses.FishingRegions;
 import me.dami.net.CustomFishing.FishingClasses.FishingStatus;
+import me.dami.net.CustomFishing.GUI.FishingGuiManager;
+import me.dami.net.CustomFishing.GUI.StaticGUIItems;
 import me.dami.net.CustomFishing.Region.FishingRegionManager;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -44,7 +46,6 @@ public class FishingMenuManager implements Runnable{
             }else{
                 return;
             }
-        System.out.println("click");
 
         Player p = (Player) e.getWhoClicked();
         int slot = e.getSlot();
@@ -136,8 +137,6 @@ public class FishingMenuManager implements Runnable{
 
         int indexX = (_fishingRegions.getItems().size() - index[0]) % 3;
         int indexY = (_fishingRegions.getItems().size() - index[0]) / 3;
-        System.out.println(indexX);
-        System.out.println(indexY);
 
         if(!itemExists){
             FishingItems fishingItem = new FishingItems(handItem.clone());
@@ -175,7 +174,7 @@ public class FishingMenuManager implements Runnable{
 
     }
 
-    private ItemStack SetDisplay(FishingItems _item){
+    public static ItemStack SetDisplay(FishingItems _item){
 
         ItemStack DisplayItem = _item.getItem().clone();
 

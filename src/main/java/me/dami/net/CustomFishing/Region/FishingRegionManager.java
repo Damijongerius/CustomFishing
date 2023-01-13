@@ -17,19 +17,19 @@ public class FishingRegionManager {
         this.configManager = _manager;
         ConfigurationSection section = null;
         try {
-            section = configManager.getSection("world.regions");
+            section =  configManager.getSection("world.regions");
         } catch (Exception e) {
-            System.out.println("[fishingRegionManager] nothing found in section");
+            System.out.println("[fishingRegionManager] could not load or there was no data in world.regions");
         }
 
-        for(String region : RegionManaging.getRegions()){
+        for(String region : RegionManaging.getRegions()) {
             ConfigurationSection fishingRegion = null;
-            if(section != null)
-              fishingRegion = section.getConfigurationSection(region);
-            if(fishingRegion == null){
-                fishingRegions.put(region,new FishingRegions());
-            }else{
-                fishingRegions.put(region,new FishingRegions(fishingRegion));
+            if (section != null)
+                fishingRegion = section.getConfigurationSection(region);
+            if (fishingRegion == null) {
+                fishingRegions.put(region, new FishingRegions());
+            } else {
+                fishingRegions.put(region, new FishingRegions(fishingRegion));
             }
         }
         Map<String, Object> map = new LinkedHashMap<>();
@@ -42,27 +42,20 @@ public class FishingRegionManager {
 
     //updates non existent regions
     public static void updateFishingRegions(){
-        try {
-            ConfigurationSection section = configManager.getSection("world.regions");
-            for(String region : RegionManaging.getRegions()){
-                ConfigurationSection fishingRegion = null;
-                if(section != null)
-                    fishingRegion = section.getConfigurationSection(region);
-                if(fishingRegion == null){
-                    fishingRegions.put(region,new FishingRegions());
-                }
+
+        for(String region : RegionManaging.getRegions()) {
+            FishingRegions fishingRegion = fishingRegions.get(region);
+            if (fishingRegion == null) {
+                fishingRegions.put(region, new FishingRegions());
             }
+        }
 
             Map<String,Object> map = new LinkedHashMap<>();
             for(Map.Entry<String,FishingRegions> fishingRegions1 : fishingRegions.entrySet()){
                 map.put(fishingRegions1.getKey(),fishingRegions1.getValue().serialize());
             }
-            configManager.setConfig("world.region",map);
+            configManager.setConfig("world.regions",map);
             configManager.saveConfig();
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public static FishingRegions getFishingRegion(String _name){

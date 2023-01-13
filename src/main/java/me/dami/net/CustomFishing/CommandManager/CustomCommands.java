@@ -2,8 +2,7 @@ package me.dami.net.CustomFishing.CommandManager;
 
 import me.dami.net.CustomFishing.GUI.FishingGuiManager;
 import me.dami.net.CustomFishing.GUI.FishingGuis;
-import me.dami.net.CustomFishing.GUI.FishingMenuGui;
-import me.dami.net.CustomFishing.Region.FishingRegionManager;
+import me.dami.net.CustomFishing.GUI.Main.FishingMenuGui;
 import me.dami.net.CustomFishing.Region.RegionManaging;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -13,7 +12,6 @@ import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 public class CustomCommands implements TabExecutor {
 
@@ -32,9 +30,7 @@ public class CustomCommands implements TabExecutor {
             return false;
         }
 
-        System.out.println("used command");
-
-        if (!command.getName().equalsIgnoreCase("fishing")) {
+        if (!command.getName().equalsIgnoreCase("fishing")){
             return false;
         }
 
@@ -44,7 +40,6 @@ public class CustomCommands implements TabExecutor {
             return false;
         }
         String region = regionManaging.getRegion(p).iterator().next().getId();
-        System.out.println(region);
         if (args.length == 2) {
             //test if region exists
             //else return

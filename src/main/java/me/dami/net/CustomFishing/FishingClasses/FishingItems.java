@@ -19,6 +19,9 @@ public class FishingItems {
 
     private float[] dropChance = new float[] {10,0};
 
+    private boolean growChance = false;
+    private float growWith = 2.5f; //chance grows 2.5 with each effect (keep in mind that is on de drop chance not percent)
+
     private List<FishingEnchantments> possibleEnchants = new ArrayList<>();
 
     //end region
@@ -59,7 +62,19 @@ public class FishingItems {
     }
 
     public void setXpRange(float[] xpRange) {
+        if(xpRange[0] > xpRange[1]){
+            this.xpRange = new float[] {xpRange[0],xpRange[0]};
+            return;
+        }
         this.xpRange = xpRange;
+    }
+
+    public boolean isGrowChance() {
+        return growChance;
+    }
+
+    public void setGrowChance(boolean growChance) {
+        this.growChance = growChance;
     }
 
     public int[] getItemAmount() {
@@ -67,6 +82,10 @@ public class FishingItems {
     }
 
     public void setItemAmount(int[] itemAmount) {
+        if(itemAmount[0] > itemAmount[1]){
+            this.itemAmount = new int[] {itemAmount[0],itemAmount[0]};
+            return;
+        }
         this.itemAmount = itemAmount;
     }
 

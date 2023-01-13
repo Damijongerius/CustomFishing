@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.misc.NotNull;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -31,13 +32,13 @@ public class FishingRegions {
             Map.Entry<String,Object> entry = item.entrySet().iterator().next();
             FishingItems newItem = new FishingItems(ItemStack.deserialize((Map<String, Object>) entry.getValue()));
 
-            Double[] dropChances = (Double[]) (item.get("dropChance"));
-            Double[] xpRange = (Double[]) item.get("Xp");
-            int[] dropAmounts = (int[]) item.get("dropAmounts");
+            ArrayList<Double> dropChances = (ArrayList<Double>) item.get("dropChance");
+            ArrayList<Double> xpRange = (ArrayList<Double>) item.get("Xp");
+            ArrayList<Integer> dropAmounts = (ArrayList<Integer>) item.get("dropAmounts");
 
-            newItem.setDropChance(new float[] {dropChances[0].floatValue(),dropChances[1].floatValue()});
-            newItem.setXpRange(new float[] {xpRange[0].floatValue(), xpRange[1].floatValue()});
-            newItem.setItemAmount(dropAmounts);
+            newItem.setDropChance(new float[] {dropChances.get(0).floatValue(),dropChances.get(1).floatValue()});
+            newItem.setXpRange(new float[] {xpRange.get(0).floatValue(),xpRange.get(1).floatValue()});
+            newItem.setItemAmount(new int[] {dropAmounts.get(0),dropAmounts.get(1)});
 
             this.items.add(newItem);
         }
@@ -48,16 +49,11 @@ public class FishingRegions {
     }
 
     public FishingItems GetRandomItem(){
-        System.out.println("-----------------------");
-        System.out.println("totaldrop:" + totalDrop);
         double randomNum = (Math.random() * 10000) / 100;
         System.out.println("random number:" + randomNum);
 
         double drop = 0;
         for (FishingItems item : items){
-            System.out.print("<");
-            System.out.print(item.getDropChance());
-            System.out.print(">");
             drop += item.getDropChance()[1];
             System.out.println(drop);
             if(drop > randomNum){
@@ -93,7 +89,6 @@ public class FishingRegions {
     public void CalculateDropChances(){
         for(FishingItems item : items){
             item.setDropPercent(totalDrop);
-            System.out.println(item.getItem().getType());
         }
     }
 

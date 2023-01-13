@@ -1,7 +1,8 @@
-package me.dami.net.CustomFishing.GUI;
+package me.dami.net.CustomFishing.GUI.Main;
 
 import me.dami.net.CustomFishing.FishingClasses.FishingItems;
 import me.dami.net.CustomFishing.FishingClasses.FishingRegions;
+import me.dami.net.CustomFishing.GUI.StaticGUIItems;
 import me.dami.net.CustomFishing.Region.FishingRegionManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -33,7 +34,7 @@ public class FishingMenuGui {
         for(int i = 0; i < items.size(); i++){
             int indexX = i % 3;
             int indexY = i / 3;
-            gui.setItem(rows[indexX][indexY],items.get(i).getItem().clone());
+            gui.setItem(rows[indexX][indexY],FishingMenuManager.SetDisplay(items.get(i)));
         }
 
 

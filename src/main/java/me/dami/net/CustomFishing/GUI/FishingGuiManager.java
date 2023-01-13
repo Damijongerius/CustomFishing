@@ -1,5 +1,6 @@
 package me.dami.net.CustomFishing.GUI;
 
+import me.dami.net.CustomFishing.GUI.Main.FishingMenuManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -26,7 +27,6 @@ public class FishingGuiManager implements Listener {
 
     @EventHandler
     public void OnInventoryClick(InventoryClickEvent e){
-        System.out.println("handler");
         Player player = (Player) e.getWhoClicked();
         if(activeGuis.containsKey(player)){
             switch (activeGuis.get(player)){
@@ -43,6 +43,7 @@ public class FishingGuiManager implements Listener {
                     break;
                 }
                 case FishingItemSettings:{
+                    e.setCancelled(true);
 
                     break;
                 }

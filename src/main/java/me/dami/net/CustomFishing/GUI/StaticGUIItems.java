@@ -18,6 +18,9 @@ public class StaticGUIItems {
     public static ItemStack statusOn = new ItemStack(Material.TORCH);
     public static ItemStack statusNo = new ItemStack(Material.BARRIER);
     public static ItemStack reset = new ItemStack(Material.REDSTONE_TORCH);
+    public static ItemStack delete = new ItemStack(Material.BARRIER);
+    public static ItemStack escape = new ItemStack(Material.BARRIER);
+    public static ItemStack enchants = new ItemStack(Material.ENCHANTED_BOOK);
 
     //end region
 
@@ -108,6 +111,41 @@ public class StaticGUIItems {
 
         reset_meta.setLore(reset_lore);
         reset.setItemMeta(reset_meta);
+
+        //------------------------\\
+
+        ItemMeta delete_meta = delete.getItemMeta();
+
+        ArrayList<String> delete_lore = new ArrayList<String>();
+
+        delete_meta.setDisplayName(ChatColor.RED + "delete Item");
+        delete_lore.add("This will remove the item");
+        delete_lore.add("all data of this item will be gone");
+
+        delete_meta.setLore(delete_lore);
+        delete.setItemMeta(delete_meta);
+
+        //------------------------\\
+
+        ItemMeta escape_meta = delete.getItemMeta();
+
+        escape_meta.setDisplayName(ChatColor.RED + "back");
+
+        escape_meta.setLore(null);
+        escape.setItemMeta(escape_meta);
+
+        //------------------------\\
+
+        ItemMeta enchants_meta = enchants.getItemMeta();
+
+        ArrayList<String> enchants_lore = new ArrayList<String>();
+
+        enchants_meta.setDisplayName(ChatColor.DARK_PURPLE + "enchantments");
+        enchants_lore.add("click to open menu for all possible enchants");
+
+        enchants_meta.setLore(enchants_lore);
+        enchants.setItemMeta(enchants_meta);
+
 
         //endregion
 

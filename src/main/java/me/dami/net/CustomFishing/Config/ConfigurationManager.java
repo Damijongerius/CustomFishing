@@ -25,13 +25,14 @@ public class ConfigurationManager {
         this.main = _main;
         fileName = _fileName;
         managers.put(_fileName,this);
+
+        startUp();
     }
 
     //get config data
     public void startUp(){
         try {
             configFile = new File(main.getDataFolder(), fileName + ".yml");
-            System.out.println("create file");
         } catch (Exception e) {
             main.saveResource( fileName+".yml", false);
         }
@@ -39,14 +40,8 @@ public class ConfigurationManager {
         config = YamlConfiguration.loadConfiguration(configFile);
     }
 
-
     public ConfigurationSection getSection(String path) throws Exception {
         return config.getConfigurationSection(path);
-    }
-
-    public void SetPathData(String path, Map<String,Object> data){
-        config.set(path, data);
-        saveConfig();
     }
 
     public void setConfig(String _path, Object _info){
@@ -56,7 +51,7 @@ public class ConfigurationManager {
     //saveConfigFile
     public void saveConfig() {
         try {
-            config.save(configFile);
+            this.config.save(this.configFile);
         } catch (IOException e) {
             main.getLogger().severe("Error saving config: " + e.getMessage());
         }
