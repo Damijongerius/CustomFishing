@@ -1,8 +1,11 @@
 package me.dami.net.CustomFishing.CommandManager;
 
+import me.dami.net.CustomFishing.FishingClasses.FishingRegions;
+import me.dami.net.CustomFishing.FishingClasses.FishingStatus;
 import me.dami.net.CustomFishing.GUI.FishingGuiManager;
 import me.dami.net.CustomFishing.GUI.FishingGuis;
 import me.dami.net.CustomFishing.GUI.Main.FishingMenuGui;
+import me.dami.net.CustomFishing.Region.FishingRegionManager;
 import me.dami.net.CustomFishing.Region.RegionManaging;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -41,11 +44,12 @@ public class CustomCommands implements TabExecutor {
         }
         String region = regionManaging.getRegion(p).iterator().next().getId();
         if (args.length == 2) {
-            //test if region exists
-            //else return
-
-        } else {
-            //set region
+            if(RegionManaging.GetRegions().contains(args[1])){
+                region = args[1];
+            }else{
+                p.sendMessage("that is not a real region");
+                return false;
+            }
         }
 
         if (region == null) return false;
@@ -53,7 +57,7 @@ public class CustomCommands implements TabExecutor {
         switch (args[0]) {
             case "i":
             case "information":
-                ShowCatchItems(region);
+                ShowCatchItems(region, p);
                 break;
 
             case "m":
@@ -98,18 +102,20 @@ public class CustomCommands implements TabExecutor {
     }
 
 
-        private void ShowCatchItems(String _region){
-
+        private void ShowCatchItems(String _region, Player p){
+        FishingRegions fishingRegion = FishingRegionManager.getFishingRegion(_region);
+        p.sendMessage(_region + " items = " + fishingRegion.getItems().toString());
         }
 
         private void OpenGuiMenu(String _region, Player p){
 
-            FishingGuiManager.AddGui(p, FishingGuis.FishingRegionGui);
+            FishingGuiManager.ChangeGui(p, FishingGuis.FishingRegionGui);
             FishingMenuGui.OpenGui(p, _region);
         }
 
         private void resetRegion(String _region){
-
+            FishingRegionManager.getFishingRegion(_region).ClearItems();
+            FishingRegionManager.getFishingRegion(_region).setStatus(FishingStatus.OFF);
         }
 
 }

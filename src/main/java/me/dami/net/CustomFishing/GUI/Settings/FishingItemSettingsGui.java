@@ -7,6 +7,7 @@ import me.dami.net.CustomFishing.Region.FishingRegionManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -16,14 +17,21 @@ import java.util.ArrayList;
 
 public class FishingItemSettingsGui {
 
-    private static ItemStack xpRange = new ItemStack(Material.EXPERIENCE_BOTTLE);
-    private static ItemStack amount = new ItemStack(Material.SUNFLOWER);
-    private static ItemStack dropChance = new ItemStack(Material.TOTEM_OF_UNDYING);
-    private static ItemStack growChance = new ItemStack(Material.BONE_MEAL);
     private static int[] fill = {0,1,2,4,6,7,9,11,13,15,16,17,18,19,20,22,24,25,26};
 
     public static void OpenGui(Player _p, FishingItems item){
-        Inventory gui = Bukkit.createInventory(_p, 54, ChatColor.AQUA + "Fishing Menu");
+        Inventory gui = Bukkit.createInventory(_p, 26, ChatColor.AQUA + "Item Menu");
+
+
+        _p.openInventory(SetItems(gui,item));
+    }
+
+    public static Inventory SetItems(Inventory inv, FishingItems item){
+
+        ItemStack xpRange = new ItemStack(Material.EXPERIENCE_BOTTLE);
+        ItemStack amount = new ItemStack(Material.SUNFLOWER);
+        ItemStack dropChance = new ItemStack(Material.TOTEM_OF_UNDYING);
+        ItemStack growChance = new ItemStack(Material.BONE_MEAL);
 
         //------------------------\\
 
@@ -96,18 +104,18 @@ public class FishingItemSettingsGui {
         //------------------------\\
 
         for(int slot : fill){
-            gui.setItem(slot, StaticGUIItems.white);
+            inv.setItem(slot, StaticGUIItems.white);
         }
 
-        gui.setItem(10,item.getItem());
-        gui.setItem(4, xpRange);
-        gui.setItem(6, growChance);
-        gui.setItem(8, StaticGUIItems.escape);
-        gui.setItem(12,amount);
-        gui.setItem(14, StaticGUIItems.enchants);
-        gui.setItem(21,dropChance);
-        gui.setItem(23, StaticGUIItems.delete);
+        inv.setItem(10,item.getItem());
+        inv.setItem(4, xpRange);
+        inv.setItem(6, growChance);
+        inv.setItem(8, StaticGUIItems.escape);
+        inv.setItem(12,amount);
+        inv.setItem(14, StaticGUIItems.enchants);
+        inv.setItem(21,dropChance);
+        inv.setItem(23, StaticGUIItems.delete);
 
-        _p.openInventory(gui);
+        return inv;
     }
 }

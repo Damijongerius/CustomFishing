@@ -23,6 +23,7 @@ public class FishingItems {
     private float growWith = 2.5f; //chance grows 2.5 with each effect (keep in mind that is on de drop chance not percent)
 
     private List<FishingEnchantments> possibleEnchants = new ArrayList<>();
+    private float followupChance = 25;
 
     //end region
 
@@ -31,21 +32,11 @@ public class FishingItems {
 
         Map<Enchantment, Integer> enchantments = _item.getEnchantments();
         if (!enchantments.isEmpty()) {
-            List<FishingEnchantments> pair = new ArrayList<>();
             for (Map.Entry<Enchantment, Integer> enchantment : enchantments.entrySet()) {
                 _item.removeEnchantment(enchantment.getKey());
                 FishingEnchantments newEnchantment = new FishingEnchantments(enchantment.getKey());
                 newEnchantment.setEnchantLevels(new int[] {1,enchantment.getValue()});
                 possibleEnchants.add(newEnchantment);
-                pair.add(newEnchantment);
-            }
-
-            for(FishingEnchantments enchantment : pair){
-                for(FishingEnchantments enchantment1 : pair){
-                    if(enchantment1 != enchantment){
-                        enchantment.addAvailiblePairing(enchantment1, true);
-                    }
-                }
             }
         }
 
@@ -105,8 +96,24 @@ public class FishingItems {
         this.possibleEnchants.add(enchantment);
     }
 
+    public void removePossibleEnchant(FishingEnchantments enchantment) {
+        this.possibleEnchants.remove(enchantment);
+    }
+
+    public void resetPossibleEnchants(){
+        this.possibleEnchants = null;
+    }
+
     public List<FishingEnchantments> getPossibleEnchants(){
         return this.possibleEnchants;
+    }
+
+    public float getFollowupChance() {
+        return followupChance;
+    }
+
+    public void setFollowupChance(float followupChance) {
+        this.followupChance = followupChance;
     }
     //endregion
 

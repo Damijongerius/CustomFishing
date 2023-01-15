@@ -1,6 +1,15 @@
 package me.dami.net.CustomFishing.GUI.Settings;
 
 import me.dami.net.CustomFishing.FishingClasses.FishingItems;
+import me.dami.net.CustomFishing.FishingClasses.FishingRegions;
+import me.dami.net.CustomFishing.GUI.Enchants.ChatFishingEnchantState;
+import me.dami.net.CustomFishing.GUI.Enchants.FishingEnchantGui;
+import me.dami.net.CustomFishing.GUI.FishingGuiInfo;
+import me.dami.net.CustomFishing.GUI.FishingGuiManager;
+import me.dami.net.CustomFishing.GUI.FishingGuis;
+import me.dami.net.CustomFishing.GUI.Main.FishingMenuGui;
+import me.dami.net.CustomFishing.Region.FishingRegionManager;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 public class FishingItemSettingsManager implements Runnable{
@@ -8,12 +17,18 @@ public class FishingItemSettingsManager implements Runnable{
     private InventoryClickEvent e;
     private FishingItems item;
 
-    public FishingItemSettingsManager(InventoryClickEvent _e, FishingItems _item){
+    private String region;
 
+    public  FishingItemSettingsManager(){}
+    public FishingItemSettingsManager(InventoryClickEvent _e, FishingGuiInfo _info){
+        this.e = _e;
+        this.item = _info.item;
     }
+
     @Override
     public void run() {
         int slot = e.getSlot();
+        Player p = (Player) e.getWhoClicked();
 
         if(slot == 3){
             //xpRange
@@ -32,6 +47,7 @@ public class FishingItemSettingsManager implements Runnable{
 
             }
             item.setXpRange(xpR);
+            FishingItemSettingsGui.SetItems(e.getClickedInventory(),item);
             return;
         }
 
@@ -40,13 +56,16 @@ public class FishingItemSettingsManager implements Runnable{
             if(e.isLeftClick()){
                 item.setGrowChance(!item.isGrowChance());
             }
+            FishingItemSettingsGui.SetItems(e.getClickedInventory(),item);
             return;
         }
 
         if(slot == 8){
             //go back to region inv
             if(e.isLeftClick()){
-
+                p.closeInventory();
+                FishingGuiManager.ChangeGui(p,FishingGuis.FishingRegionGui);
+                FishingMenuGui.OpenGui(p, region);
             }
             return;
         }
@@ -70,13 +89,17 @@ public class FishingItemSettingsManager implements Runnable{
                 }
             }
             item.setItemAmount(dAmount);
+            FishingItemSettingsGui.SetItems(e.getClickedInventory(),item);
             return;
         }
 
         if(slot == 14){
             //open enchantment menu
             if(e.isLeftClick()){
-
+                p.closeInventory();
+                FishingGuiManager.ChangeGui(p,FishingGuis.FishingItemEnchants);
+                FishingEnchantGui.OpenGui(p, item,region, ChatFishingEnchantState.CHANCE);
+                FishingGuiManager.ChangeChatEnchantState(p, ChatFishingEnchantState.CHANCE);
             }
             return;
         }
@@ -91,13 +114,19 @@ public class FishingItemSettingsManager implements Runnable{
                 dropC[0] += 1;
             }
             item.setDropChance(dropC);
+            FishingItemSettingsGui.SetItems(e.getClickedInventory(),item);
             return;
         }
 
         if(slot == 23){
             //delete item and go back into region inv
             if(e.isLeftClick() && e.isShiftClick()){
+                FishingRegions fr = FishingRegionManager.getFishingRegion(region);
+                fr.RemoveItem(item);
 
+                p.closeInventory();
+                FishingGuiManager.ChangeGui(p, FishingGuis.FishingRegionGui);
+                FishingMenuGui.OpenGui(p, region);
             }
             return;
         }

@@ -1,6 +1,10 @@
 package me.dami.net.CustomFishing.GUI;
 
+import me.dami.net.CustomFishing.FishingClasses.FishingItems;
+import me.dami.net.CustomFishing.GUI.Enchants.ChatFishingEnchantState;
+import me.dami.net.CustomFishing.GUI.Enchants.FishingEnchantManager;
 import me.dami.net.CustomFishing.GUI.Main.FishingMenuManager;
+import me.dami.net.CustomFishing.GUI.Settings.FishingItemSettingsManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,60 +16,77 @@ import java.util.Map;
 
 public class FishingGuiManager implements Listener {
 
-    private static Map<Player, FishingGuis> activeGuis = new LinkedHashMap<>();
-    private static Map<Player, Integer[]> Indexes = new LinkedHashMap<>();
-
+    private static Map<Player, FishingGuiInfo> playerInfo = new LinkedHashMap<>();
     FishingMenuManager fishingMenuManager = new FishingMenuManager();
+    FishingEnchantManager fishingEnchantManager = new FishingEnchantManager();
+
+    FishingItemSettingsManager fishingItemSettingsManager = new FishingItemSettingsManager();
 
     @EventHandler
     public void OnInventoryClose(InventoryCloseEvent e){
-        if(activeGuis.containsKey(e.getPlayer())){
-            activeGuis.remove(e.getPlayer());
+        Player p = (Player) e.getPlayer();
+        if(playerInfo.containsKey(p)){
+            playerInfo.remove(playerInfo);
         }
     }
-
 
     @EventHandler
     public void OnInventoryClick(InventoryClickEvent e){
         Player player = (Player) e.getWhoClicked();
-        if(activeGuis.containsKey(player)){
-            switch (activeGuis.get(player)){
+        if(playerInfo.containsKey(player)){
+            switch (playerInfo.get(player).activeGui){
                 case FishingRegionGui:{
                     if(e.getClickedInventory().getType().getDefaultTitle() == "Chest")
                         e.setCancelled(true);
-                    fishingMenuManager = new FishingMenuManager(e,Indexes.get(player));
+                    fishingMenuManager = new FishingMenuManager(e,playerInfo.get(player));
                     Thread thread = new Thread(fishingMenuManager);
                     thread.start();
                     break;
                 }
                 case FishingItemEnchants:{
+                    if(e.getClickedInventory().getType().getDefaultTitle() == "Chest")
+                        e.setCancelled(true);
+                    fishingEnchantManager = new FishingEnchantManager(e,playerInfo.get(player));
+                    Thread thread = new Thread(fishingEnchantManager);
+                    thread.start();
 
                     break;
                 }
                 case FishingItemSettings:{
                     e.setCancelled(true);
-
+                    fishingItemSettingsManager = new FishingItemSettingsManager(e, playerInfo.get(player));
+                    Thread thread = new Thread(fishingItemSettingsManager);
+                    thread.start();
                     break;
                 }
             }
         }
     }
-
-    public static void AddGui(Player _p, FishingGuis _gui){
-        activeGuis.put(_p, _gui);
-        Indexes.put(_p, new Integer[]{0, 0});
+    public static void AddPlayer(Player _p, FishingGuiInfo _info){
+        playerInfo.put(_p,_info);
     }
 
-    public static void SetIndex(Player p,int _index){
-        Integer[] index = Indexes.get(p);
-        index[0] = _index;
-        Indexes.replace(p, index);
+    public static void ChanceRegion(Player _p, String _region){
+        playerInfo.get(_p).region = _region;
     }
 
-    public static void SetIndex(Player p, int _index0, int _index1){
-        Integer[] index = Indexes.get(p);
-        index[0] = _index0;
-        index[1] = _index1;
-        Indexes.replace(p, index);
+    public static void ChangeGui(Player _p, FishingGuis _gui){
+        playerInfo.get(_p).activeGui = _gui;
+    }
+
+    public static void ChangeItem(Player _p, FishingItems _item){
+        playerInfo.get(_p).item = _item;
+    }
+
+    public static void ChangeChatEnchantState(Player _p, ChatFishingEnchantState _state){
+        playerInfo.get(_p).chatEnchantStage = _state;
+    }
+
+    public static ChatFishingEnchantState GetEnchantStage(Player _p){
+        return playerInfo.get(_p).chatEnchantStage;
+    }
+
+    public static void ChangeIndex(Player _p, Integer _index){
+        playerInfo.get(_p).inventoryIndex[0] = _index;
     }
 }

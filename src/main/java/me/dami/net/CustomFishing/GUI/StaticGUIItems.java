@@ -2,6 +2,7 @@ package me.dami.net.CustomFishing.GUI;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -21,6 +22,8 @@ public class StaticGUIItems {
     public static ItemStack delete = new ItemStack(Material.BARRIER);
     public static ItemStack escape = new ItemStack(Material.BARRIER);
     public static ItemStack enchants = new ItemStack(Material.ENCHANTED_BOOK);
+    public static ItemStack reset2 = new ItemStack(Material.REDSTONE_TORCH);
+    public static ItemStack followUp = new ItemStack(Material.EXPERIENCE_BOTTLE);
 
     //end region
 
@@ -145,6 +148,32 @@ public class StaticGUIItems {
 
         enchants_meta.setLore(enchants_lore);
         enchants.setItemMeta(enchants_meta);
+
+        //------------------------\\
+
+        ItemMeta reset2_meta = reset.getItemMeta();
+
+        ArrayList<String> reset2_lore = new ArrayList<String>();
+
+        reset2_meta.setDisplayName(ChatColor.RED + "Reset enchants");
+        reset2_lore.add("This will remove all enchantments of the item");
+
+        reset2_meta.setLore(reset2_lore);
+        reset2.setItemMeta(reset2_meta);
+
+        //------------------------\\
+
+        ItemMeta followUp_meta = reset.getItemMeta();
+
+        ArrayList<String> followUp_lore = new ArrayList<String>();
+
+        followUp_meta.setDisplayName(ChatColor.RED + "Reset enchants");
+        followUp_lore.add("This will remove all enchantments of the item");
+
+        followUp_meta.setLore(followUp_lore);
+        followUp.setItemMeta(followUp_meta);
+
+        //------------------------\\
 
 
         //endregion

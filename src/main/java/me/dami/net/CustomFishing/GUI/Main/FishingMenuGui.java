@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -27,36 +28,43 @@ public class FishingMenuGui {
 
     public static void OpenGui(Player _p, String _region){
         Inventory gui = Bukkit.createInventory(_p, 54, ChatColor.AQUA + "Fishing Menu");
+
+        _p.openInventory(SetItems(gui,_region, 0));
+
+    }
+
+    public static Inventory SetItems(Inventory _inv, String _region, Integer start){
+
         FishingRegions fishingRegion = FishingRegionManager.getFishingRegion(_region);
 
         List<FishingItems> items = fishingRegion.getItems();
 
-        for(int i = 0; i < items.size(); i++){
-            int indexX = i % 3;
-            int indexY = i / 3;
-            gui.setItem(rows[indexX][indexY],FishingMenuManager.SetDisplay(items.get(i)));
+        for(int i = start; i < items.size(); i++){
+            int indexX = (i - start) % 3;
+            int indexY = (i - start) / 3;
+            _inv.setItem(rows[indexX][indexY],SetDisplay(items.get(i)));
         }
 
 
         for (int index : orderW) {
-            gui.setItem(index, StaticGUIItems.white);
+            _inv.setItem(index, StaticGUIItems.white);
         }
 
         for(int index : orderL){
-            gui.setItem(index,StaticGUIItems.navigateLeft);
+            _inv.setItem(index,StaticGUIItems.navigateLeft);
         }
 
         for(int index : orderR){
-            gui.setItem(index,StaticGUIItems.navigateRight);
+            _inv.setItem(index,StaticGUIItems.navigateRight);
         }
 
-        gui.setItem(13, GetRegionItem(_region));
+        _inv.setItem(13, GetRegionItem(_region));
 
-        gui.setItem(15, StaticGUIItems.reset);
+        _inv.setItem(15, StaticGUIItems.reset);
 
-        gui.setItem(11, getStatus(fishingRegion));
+        _inv.setItem(11, getStatus(fishingRegion));
 
-        _p.openInventory(gui);
+        return _inv;
 
     }
 
@@ -85,7 +93,24 @@ public class FishingMenuGui {
         return region;
     }
 
-    private void SetItems(Map<Integer,ItemStack> _guiItems){
+    public static ItemStack SetDisplay(FishingItems _item){
 
+        ItemStack DisplayItem = _item.getItem().clone();
+
+        ItemMeta DisplayItem_meta = DisplayItem.getItemMeta();
+
+        ArrayList<String> DisplayItem_lore = new ArrayList<>();
+
+        int[] amounts = _item.getItemAmount();
+        float[] xp = _item.getXpRange();
+        DisplayItem_lore.add("Amount: ( " + amounts[0] + " , " + amounts[1] + " )");
+        DisplayItem_lore.add("DropChance: " + _item.getDropChance()[0]);
+        DisplayItem_lore.add("XpDrop: ( " + xp[0] + " , " + xp[1] + ")");
+        DisplayItem_meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+
+        DisplayItem_meta.setLore(DisplayItem_lore);
+        DisplayItem.setItemMeta(DisplayItem_meta);
+
+        return DisplayItem;
     }
 }

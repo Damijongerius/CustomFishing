@@ -1,6 +1,7 @@
 package me.dami.net.CustomFishing.FishingClasses;
 
 import org.antlr.v4.runtime.misc.NotNull;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
@@ -73,6 +74,17 @@ public class FishingRegions {
             newItems.add(this.items.get(i));
         }
         return newItems;
+    }
+
+    public void RemoveItem(FishingItems _item){
+        this.items.remove(_item);
+        this.totalDrop -= _item.getDropChance()[0];
+        CalculateDropChances();
+    }
+
+    public FishingItems getItemWithMaterial(Material _material){
+        for(FishingItems item : items) if(item.getItem().getType() == _material) return item;
+        return null;
     }
 
 
