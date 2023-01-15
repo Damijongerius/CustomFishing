@@ -1,6 +1,7 @@
 package me.dami.net.CustomFishing.FishingClasses;
 
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -77,6 +78,9 @@ public class FishingItems {
             this.itemAmount = new int[] {itemAmount[0],itemAmount[0]};
             return;
         }
+        if(this.item.getMaxStackSize() < itemAmount[1]){
+            return;
+        }
         this.itemAmount = itemAmount;
     }
 
@@ -119,6 +123,37 @@ public class FishingItems {
 
     public int getRandomAmount(){
         return (int) Math.round(Math.random() * (itemAmount[1] - itemAmount[0]) + itemAmount[0]);
+    }
+
+    public ItemStack AddEnchantment(ItemStack _item){
+        if(Math.random() * 100 < followupChance){
+
+        }
+        ItemStack item = _item;
+        while(Math.random() * 100 < followupChance){
+            item = SetEnchant(item);
+            followupChance -= 2.5f;
+        }
+        return item;
+    }
+
+    private ItemStack SetEnchant(ItemStack item){
+        int numb =(int) Math.round(Math.random() * 100);
+
+        float numb2 = 0;
+        float all = 0;
+        for(FishingEnchantments enchant : possibleEnchants){
+            all += enchant.getEnchantChance()[0];
+        }
+
+        for(FishingEnchantments enchant : possibleEnchants){
+            numb2 += (enchant.getEnchantChance()[0] / all) * 100;
+            if(numb2 > numb && !item.getEnchantments().containsKey(enchant.getEnchant())){
+                item.addEnchantment(enchant.getEnchant(), enchant.getRandomEnchant());
+                return item;
+            }
+        }
+        return item;
     }
 
     public int getRandomxp(){

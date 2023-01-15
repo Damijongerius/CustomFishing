@@ -55,6 +55,10 @@ public class FishingEnchantments {
         return null;
     }
 
+    public int getRandomEnchant(){
+        return (int) Math.round(Math.random() * enchantLevels[0]);
+    }
+
     public Map<String,Object> Serialize(){
         Map<String,Object> map = new LinkedHashMap<>();
 
@@ -75,13 +79,12 @@ public class FishingEnchantments {
         ArrayList<String> lore = new ArrayList<String>();
 
 
-        meta.setDisplayName(ChatColor.DARK_PURPLE + "enchantments");
+        meta.setDisplayName(ChatColor.DARK_PURPLE + e.getEnchant().getName());
         switch (_state){
             case CHANCE:{
                 float[] chance = e.getEnchantChance();
-                String underLine = ChatColor.UNDERLINE +  "CHANCE";
-                lore.add("| Levels ||" + underLine + "|| Delete |");
-                lore.add("-------------------------------------------");
+                lore.add("| Levels || CHANCE|| Delete |");
+                lore.add("-----------------------------------");
                 if(chance[0] < 10 && chance[1] < 10){
                     lore.add("|(lC +1) ||  chance("+ chance[0] +", " + chance[1] + "%)  || (rC -1)|");
                     break;
@@ -101,17 +104,15 @@ public class FishingEnchantments {
                 break;
             }
             case LEVELS:{
-                String underLine = ChatColor.UNDERLINE + "LEVELS";
                 int[] enchL = e.enchantLevels;
-                lore.add("| Delete ||" + underLine + "|| Chance |");
-                lore.add("-------------------------------------------");
+                lore.add("| Delete || LEVELS || Chance |");
+                lore.add("-----------------------------------");
                 lore.add("|(lC +1) || enchantLevels("+ enchL[0] +" tm "+ enchL[1] +")  || (rC -1)|");
                 break;
             }
             case DELETE:{
-                String underLine = ChatColor.UNDERLINE + "DELETE";
-                lore.add("| Chance ||" + underLine + "|| Levels |") ;
-                lore.add("-------------------------------------------");
+                lore.add("| Chance || DELETE || Levels |") ;
+                lore.add("-----------------------------------");
                 lore.add("| DELETE ITEM BY PRESSING RIGHTCLICK  |");
                 break;
             }

@@ -25,7 +25,7 @@ public class FishingEnchantGui {
     private static int[][] itemList = {{1,2,3,4,5},{10,11,12,13,14},{19,20,21,22,23}};
 
     public static void OpenGui(Player _p, FishingItems _item, String _region, ChatFishingEnchantState _state) {
-        Inventory gui = Bukkit.createInventory(_p, 54, ChatColor.DARK_PURPLE + "Enchant menu");
+        Inventory gui = Bukkit.createInventory(_p, 27, ChatColor.DARK_PURPLE + "Enchant menu");
 
         _p.openInventory(SetItems(gui,_item,_state));
     }
@@ -56,7 +56,7 @@ public class FishingEnchantGui {
 
         followUp_meta.setDisplayName(ChatColor.GOLD + "followUp chance");
         followUp_lore.add("chance of getting more then one enchantment");
-        followUp_lore.add("-------------------------------------------");
+        followUp_lore.add("--------------------------------------");
         followUp_lore.add("|  chance = "+ _item.getFollowupChance());
 
         followUp_meta.setLore(followUp_lore);

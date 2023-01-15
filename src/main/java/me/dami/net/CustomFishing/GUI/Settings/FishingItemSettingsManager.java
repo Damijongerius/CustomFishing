@@ -12,21 +12,14 @@ import me.dami.net.CustomFishing.Region.FishingRegionManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
-public class FishingItemSettingsManager implements Runnable{
-
-    private InventoryClickEvent e;
-    private FishingItems item;
-
-    private String region;
+public class FishingItemSettingsManager{
 
     public  FishingItemSettingsManager(){}
-    public FishingItemSettingsManager(InventoryClickEvent _e, FishingGuiInfo _info){
-        this.e = _e;
-        this.item = _info.item;
-    }
 
-    @Override
-    public void run() {
+    public void inventoryClickEvent(InventoryClickEvent e, FishingGuiInfo _info){
+        FishingItems item = _info.getItem();
+        String region = _info.getRegion();
+
         int slot = e.getSlot();
         Player p = (Player) e.getWhoClicked();
 
@@ -64,6 +57,7 @@ public class FishingItemSettingsManager implements Runnable{
             //go back to region inv
             if(e.isLeftClick()){
                 p.closeInventory();
+                FishingGuiManager.AddPlayer(p,_info);
                 FishingGuiManager.ChangeGui(p,FishingGuis.FishingRegionGui);
                 FishingMenuGui.OpenGui(p, region);
             }
@@ -97,6 +91,7 @@ public class FishingItemSettingsManager implements Runnable{
             //open enchantment menu
             if(e.isLeftClick()){
                 p.closeInventory();
+                FishingGuiManager.AddPlayer(p,_info);
                 FishingGuiManager.ChangeGui(p,FishingGuis.FishingItemEnchants);
                 FishingEnchantGui.OpenGui(p, item,region, ChatFishingEnchantState.CHANCE);
                 FishingGuiManager.ChangeChatEnchantState(p, ChatFishingEnchantState.CHANCE);
@@ -111,7 +106,7 @@ public class FishingItemSettingsManager implements Runnable{
                 dropC[0] += 1;
             }
             if(e.isRightClick()){
-                dropC[0] += 1;
+                dropC[0] -= 1;
             }
             item.setDropChance(dropC);
             FishingItemSettingsGui.SetItems(e.getClickedInventory(),item);
@@ -123,8 +118,8 @@ public class FishingItemSettingsManager implements Runnable{
             if(e.isLeftClick() && e.isShiftClick()){
                 FishingRegions fr = FishingRegionManager.getFishingRegion(region);
                 fr.RemoveItem(item);
-
                 p.closeInventory();
+                FishingGuiManager.AddPlayer(p,_info);
                 FishingGuiManager.ChangeGui(p, FishingGuis.FishingRegionGui);
                 FishingMenuGui.OpenGui(p, region);
             }

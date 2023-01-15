@@ -26,7 +26,7 @@ public class FishingGuiManager implements Listener {
     public void OnInventoryClose(InventoryCloseEvent e){
         Player p = (Player) e.getPlayer();
         if(playerInfo.containsKey(p)){
-            playerInfo.remove(playerInfo);
+            playerInfo.remove(p);
         }
     }
 
@@ -34,29 +34,27 @@ public class FishingGuiManager implements Listener {
     public void OnInventoryClick(InventoryClickEvent e){
         Player player = (Player) e.getWhoClicked();
         if(playerInfo.containsKey(player)){
-            switch (playerInfo.get(player).activeGui){
+            switch (playerInfo.get(player).getActiveGui()){
                 case FishingRegionGui:{
-                    if(e.getClickedInventory().getType().getDefaultTitle() == "Chest")
+                    if(e.getClickedInventory().getType().getDefaultTitle() == "Chest") {
                         e.setCancelled(true);
-                    fishingMenuManager = new FishingMenuManager(e,playerInfo.get(player));
-                    Thread thread = new Thread(fishingMenuManager);
-                    thread.start();
+                        fishingMenuManager.inventoryClickEvent(e, playerInfo.get(player));
+                    }
                     break;
                 }
                 case FishingItemEnchants:{
-                    if(e.getClickedInventory().getType().getDefaultTitle() == "Chest")
+                    if(e.getClickedInventory().getType().getDefaultTitle() == "Chest"){
                         e.setCancelled(true);
-                    fishingEnchantManager = new FishingEnchantManager(e,playerInfo.get(player));
-                    Thread thread = new Thread(fishingEnchantManager);
-                    thread.start();
+                        fishingEnchantManager.inventoryClickEvent(e,playerInfo.get(player));
+                    }
 
                     break;
                 }
                 case FishingItemSettings:{
                     e.setCancelled(true);
-                    fishingItemSettingsManager = new FishingItemSettingsManager(e, playerInfo.get(player));
-                    Thread thread = new Thread(fishingItemSettingsManager);
-                    thread.start();
+                    if(e.getClickedInventory().getType().getDefaultTitle() == "Chest") {
+                        fishingItemSettingsManager.inventoryClickEvent(e, playerInfo.get(player));
+                    }
                     break;
                 }
             }
@@ -64,29 +62,31 @@ public class FishingGuiManager implements Listener {
     }
     public static void AddPlayer(Player _p, FishingGuiInfo _info){
         playerInfo.put(_p,_info);
+        System.out.println(_info.getRegion());
     }
 
     public static void ChanceRegion(Player _p, String _region){
-        playerInfo.get(_p).region = _region;
+        playerInfo.get(_p).setRegion(_region);
     }
 
     public static void ChangeGui(Player _p, FishingGuis _gui){
-        playerInfo.get(_p).activeGui = _gui;
+        playerInfo.get(_p).setActiveGui(_gui);
+
     }
 
     public static void ChangeItem(Player _p, FishingItems _item){
-        playerInfo.get(_p).item = _item;
+        playerInfo.get(_p).setItem(_item);
     }
 
     public static void ChangeChatEnchantState(Player _p, ChatFishingEnchantState _state){
-        playerInfo.get(_p).chatEnchantStage = _state;
+        playerInfo.get(_p).setChatEnchantStage(_state);
     }
 
     public static ChatFishingEnchantState GetEnchantStage(Player _p){
-        return playerInfo.get(_p).chatEnchantStage;
+        return playerInfo.get(_p).getChatEnchantStage();
     }
 
     public static void ChangeIndex(Player _p, Integer _index){
-        playerInfo.get(_p).inventoryIndex[0] = _index;
+        playerInfo.get(_p).setInventoryIndex(new Integer[] {_index, 1000});
     }
 }

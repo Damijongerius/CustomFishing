@@ -1,15 +1,12 @@
 item moet 1 zijn in itemstack
 item moet meer zijn in fishing region als hij in itemstack meer dan 1 was
 
-enchant menu
-item settings menu
+item test max itemstack
 fix permissions
 fix admin commands
 reset region
 regio scroll
-
-geef region mee bij item settings en enchant menu
-update gui na het aanpassen
+can't get 2 of same enchants
 
 extra
 krijg een leven

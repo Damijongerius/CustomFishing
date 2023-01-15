@@ -58,6 +58,7 @@ public class Fishing implements Listener {
         FishingItems randomItem = fishingRegion.GetRandomItem();
         ItemStack rItem = randomItem.getItem().clone();
         rItem.setAmount(randomItem.getRandomAmount());
+        rItem = randomItem.AddEnchantment(rItem);
         Entity droppedI = player.getWorld().dropItem(hook.getLocation(), rItem);
         player.giveExp(Math.round(randomItem.getRandomxp()));
         hook.setHookedEntity(droppedI);

@@ -18,31 +18,19 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
 
-public class FishingMenuManager implements Runnable{
+public class FishingMenuManager{
 
-    private InventoryClickEvent e;
-    private Integer[] index;
+    public void inventoryClickEvent(InventoryClickEvent e, FishingGuiInfo _info){
+        Integer[] index = _info.getInventoryIndex();
 
-    private String region;
+        String region = _info.getRegion();
 
-    public FishingMenuManager(InventoryClickEvent _e, FishingGuiInfo _info){
-        this.e = _e;
-        this.index = _info.inventoryIndex;
-        this.region = _info.region;
-    }
-
-    public FishingMenuManager(){
-
-    }
-
-    @Override
-    public void run(){
         FishingRegions fishingRegions = FishingRegionManager.getFishingRegion(region);
 
         Player p = (Player) e.getWhoClicked();
         int slot = e.getSlot();
         if(e.getCursor() != null && e.getCursor().getType() != Material.AIR){
-            HasItem(e,index, fishingRegions);
+            HasItem(e,index, fishingRegions, region);
             return;
         }
 
@@ -85,6 +73,7 @@ public class FishingMenuManager implements Runnable{
 
         if(slot == 15){
             //reset items
+            System.out.println("reset");
             fishingRegions.ClearItems();
             FishingGuiManager.ChangeIndex(p,0);
             FishingMenuGui.SetItems(e.getClickedInventory(),region, 0);
@@ -95,58 +84,58 @@ public class FishingMenuManager implements Runnable{
             if(e.getCurrentItem().getType() == Material.AIR){
                 return;
             }
-
-            p.closeInventory();
-            FishingGuiManager.ChangeGui(p, FishingGuis.FishingItemSettings);
-            FishingItemSettingsGui.OpenGui(p,fishingRegions.getItemWithMaterial(e.getCurrentItem().getType()));
-
+            if(Enchantment.DURABILITY.canEnchantItem(e.getCurrentItem())){
+                p.closeInventory();
+                FishingGuiManager.AddPlayer(p,_info);
+                FishingGuiManager.ChangeGui(p, FishingGuis.FishingItemSettings);
+                FishingGuiManager.ChangeItem(p, fishingRegions.getItemWithMaterial(e.getCurrentItem().getType()));
+                FishingItemSettingsGui.OpenGui(p,fishingRegions.getItemWithMaterial(e.getCurrentItem().getType()));
+            }
         }
     }
 
-    public void HasItem(InventoryClickEvent e, Integer[] index, FishingRegions _fishingRegions){
-        int slot = e.getSlot();
+public void HasItem(InventoryClickEvent e, Integer[] index, FishingRegions _fishingRegions, String region) {
+    int slot = e.getSlot();
 
-        boolean InInventory = slot >= 0 && slot <= 53;
-        if (!InInventory) {
-            return;
-        }
+    boolean InInventory = slot >= 0 && slot <= 53;
+    if (!InInventory) {
+        return;
+    }
 
-        //add item
-        ItemStack handItem = e.getCursor();
-        boolean itemExists = false;
-        FishingItems originalItem = null;
-        for(FishingItems fishingItem : _fishingRegions.getItems()){
-            if(fishingItem.getItem().getType() == handItem.getType()){
-                itemExists = true;
-                originalItem = fishingItem;
-            }
-        }
-
-        if(!itemExists){
-            FishingItems fishingItem = new FishingItems(handItem.clone());
-
-            _fishingRegions.AddItem(fishingItem);
-
-            FishingMenuGui.SetItems(e.getClickedInventory(),region, index[0]);
-
-        }else{
-            int[] amounts = originalItem.getItemAmount();
-            Map< Enchantment, Integer> enchantments = handItem.getEnchantments();
-            if(amounts[1] < handItem.getAmount()) originalItem.setItemAmount(new int[] {amounts[0], handItem.getAmount()});
-
-            if(!enchantments.isEmpty()){
-                for(Map.Entry<Enchantment,Integer> enchant : enchantments.entrySet()){
-                    FishingEnchantments newEnchantment = new FishingEnchantments(enchant.getKey());
-
-                    newEnchantment.setEnchantLevels(new int[] {1,enchant.getValue()});
-                    originalItem.addPossibleEnchant(newEnchantment);
-                }
-            }
-
-            FishingMenuGui.SetItems(e.getClickedInventory(),region, index[0]);
+    //add item
+    ItemStack handItem = e.getCursor();
+    boolean itemExists = false;
+    FishingItems originalItem = null;
+    for (FishingItems fishingItem : _fishingRegions.getItems()) {
+        if (fishingItem.getItem().getType() == handItem.getType()) {
+            itemExists = true;
+            originalItem = fishingItem;
         }
     }
 
+    if (!itemExists) {
+        FishingItems fishingItem = new FishingItems(handItem.clone());
 
+        _fishingRegions.AddItem(fishingItem);
+
+        FishingMenuGui.SetItems(e.getClickedInventory(), region, index[0]);
+
+    } else {
+        int[] amounts = originalItem.getItemAmount();
+        Map<Enchantment, Integer> enchantments = handItem.getEnchantments();
+        if (amounts[1] < handItem.getAmount()) originalItem.setItemAmount(new int[]{amounts[0], handItem.getAmount()});
+
+        if (!enchantments.isEmpty()) {
+            for (Map.Entry<Enchantment, Integer> enchant : enchantments.entrySet()) {
+                FishingEnchantments newEnchantment = new FishingEnchantments(enchant.getKey());
+
+                newEnchantment.setEnchantLevels(new int[]{1, enchant.getValue()});
+                if(!originalItem.getPossibleEnchants().contains(newEnchantment)) originalItem.addPossibleEnchant(newEnchantment);
+            }
+        }
+
+        FishingMenuGui.SetItems(e.getClickedInventory(), region, index[0]);
+    }
+}
 
 }

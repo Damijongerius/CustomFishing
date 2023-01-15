@@ -58,6 +58,7 @@ public class FishingRegions {
             drop += item.getDropChance()[1];
             System.out.println(drop);
             if(drop > randomNum){
+
                 return item;
             }
         }

@@ -2,6 +2,7 @@ package me.dami.net.CustomFishing.CommandManager;
 
 import me.dami.net.CustomFishing.FishingClasses.FishingRegions;
 import me.dami.net.CustomFishing.FishingClasses.FishingStatus;
+import me.dami.net.CustomFishing.GUI.FishingGuiInfo;
 import me.dami.net.CustomFishing.GUI.FishingGuiManager;
 import me.dami.net.CustomFishing.GUI.FishingGuis;
 import me.dami.net.CustomFishing.GUI.Main.FishingMenuGui;
@@ -91,7 +92,7 @@ public class CustomCommands implements TabExecutor {
 
         if (command.getName().equalsIgnoreCase("fishing")) {
             if (args.length == 1) {
-                options = Arrays.asList("information", "menu", "reset", "help", "confirm");
+                options = Arrays.asList("information", "menu", "reset", "help");
             }
             if (args.length == 2) {
                 options = RegionManaging.GetRegions();
@@ -109,7 +110,11 @@ public class CustomCommands implements TabExecutor {
 
         private void OpenGuiMenu(String _region, Player p){
 
-            FishingGuiManager.ChangeGui(p, FishingGuis.FishingRegionGui);
+            FishingGuiInfo guiInfo = new FishingGuiInfo();
+            guiInfo.setActiveGui(FishingGuis.FishingRegionGui);
+            guiInfo.setRegion(_region);
+            guiInfo.setInventoryIndex(new Integer[] {1,100});
+            FishingGuiManager.AddPlayer(p,guiInfo);
             FishingMenuGui.OpenGui(p, _region);
         }
 

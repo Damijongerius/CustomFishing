@@ -20,7 +20,7 @@ public class FishingItemSettingsGui {
     private static int[] fill = {0,1,2,4,6,7,9,11,13,15,16,17,18,19,20,22,24,25,26};
 
     public static void OpenGui(Player _p, FishingItems item){
-        Inventory gui = Bukkit.createInventory(_p, 26, ChatColor.AQUA + "Item Menu");
+        Inventory gui = Bukkit.createInventory(_p, 27, ChatColor.AQUA + "Item Menu");
 
 
         _p.openInventory(SetItems(gui,item));
@@ -42,11 +42,11 @@ public class FishingItemSettingsGui {
         xpRange_meta.setDisplayName(ChatColor.GOLD + "xpRange");
         float[] xp = item.getXpRange();
         xpRange_lore.add("the xpRange it drops when the item is fished");
-        xpRange_lore.add("-------------------------------------------------");
+        xpRange_lore.add("-------------------------------------");
         xpRange_lore.add("Current amounts minXp("+xp[0]+") || maxXp("+xp[1]+")");
-        xpRange_lore.add("-------------------------------------------------");
+        xpRange_lore.add("-------------------------------------");
         xpRange_lore.add("leftClick = +10 on max || rightClick = -10 on max");
-        xpRange_lore.add("   ^^       with shift +/- 10 on min       ^^");
+        xpRange_lore.add("   ^^     with shift +/- 10 on min     ^^");
 
         xpRange_meta.setLore(xpRange_lore);
         xpRange.setItemMeta(xpRange_meta);
@@ -60,9 +60,9 @@ public class FishingItemSettingsGui {
         amount_meta.setDisplayName(ChatColor.GREEN + "itemAmount");
         int[] count = item.getItemAmount();
         amount_lore.add("the amount it can drop when the item is fished");
-        amount_lore.add("-------------------------------------------------");
+        amount_lore.add("-------------------------------------");
         amount_lore.add("Current amounts minAmount("+count[0]+") || maxAmount("+count[1]+")");
-        amount_lore.add("-------------------------------------------------");
+        amount_lore.add("-------------------------------------");
         amount_lore.add("leftClick = +1 on max || rightClick = -1 on max");
         amount_lore.add("   ^^       with shift +/- 1 on min       ^^");
 
@@ -75,12 +75,12 @@ public class FishingItemSettingsGui {
 
         ArrayList<String> dropChance_lore = new ArrayList<String>();
 
-        dropChance_meta.setDisplayName(ChatColor.GREEN + "itemAmount");
+        dropChance_meta.setDisplayName(ChatColor.GOLD + "dropChance");
         float[] dropc = item.getDropChance();
         dropChance_lore.add("the chance it can drop when the item is fished");
-        dropChance_lore.add("-------------------------------------------------");
+        dropChance_lore.add("-------------------------------------");
         dropChance_lore.add("Current drop chance("+dropc[0]+") || drop percent("+dropc[1]+")");
-        dropChance_lore.add("-------------------------------------------------");
+        dropChance_lore.add("-------------------------------------");
         dropChance_lore.add("leftClick = +1|| rightClick = -1");
 
         dropChance_meta.setLore(dropChance_lore);
@@ -92,10 +92,11 @@ public class FishingItemSettingsGui {
 
         ArrayList<String> growChance_lore = new ArrayList<String>();
 
-        growChance_meta.setDisplayName(ChatColor.GREEN + "itemAmount");
-        float[] growC = item.getDropChance();
+        growChance_meta.setDisplayName(ChatColor.GRAY + "growChance");
+        boolean growC = item.isGrowChance();
         growChance_lore.add("click to change state");
-        growChance_lore.add("------------------------------");
+        growChance_lore.add("item will increase with effects");
+        growChance_lore.add("---------------------------");
         growChance_lore.add("Current state is (" +  growC + ")");
 
         growChance_meta.setLore(growChance_lore);
@@ -108,8 +109,8 @@ public class FishingItemSettingsGui {
         }
 
         inv.setItem(10,item.getItem());
-        inv.setItem(4, xpRange);
-        inv.setItem(6, growChance);
+        inv.setItem(3, xpRange);
+        inv.setItem(5, growChance);
         inv.setItem(8, StaticGUIItems.escape);
         inv.setItem(12,amount);
         inv.setItem(14, StaticGUIItems.enchants);
